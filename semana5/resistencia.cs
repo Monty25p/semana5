@@ -1,0 +1,92 @@
+﻿using System;
+
+class Program
+{
+    static void Main()
+    {
+        string[] listaColores = new string[] { "negro", "café", "rojo", "naranja", "amarillo", "verde", "azul", "violeta", "gris", "blanco", "oro", "plata", "sin color" };
+
+        while (true)
+        {
+            int numBandas = 0;
+            int intentos = 3;
+
+            for (int i = 0; i < intentos; i++)
+            {
+                Console.Write("Ingrese la cantidad de bandas (de 3 a 6): ");
+                numBandas = int.Parse(Console.ReadLine());
+
+                if (numBandas < 3 || numBandas > 6)
+                {
+                    Console.WriteLine("Cantidad de bandas no válida. Debe ser entre 3 y 6.");
+                    Console.WriteLine($"Intentos restantes: {intentos - (i + 1)}");
+                }
+                else
+                {
+                    break;
+                }
+
+                if (i == intentos - 1)
+                {
+                    Console.WriteLine("Número de intentos agotados, el programa se cerrará.");
+                    return;
+                }
+            }
+
+            string[] bandas = new string[numBandas];
+
+            for (int i = 0; i < numBandas; i++)
+            {
+                bool colorValido = false;
+                while (!colorValido)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Seleccione el color para la banda {i + 1}:");
+
+                    for (int j = 0; j < listaColores.Length; j++)
+                    {
+                        Console.WriteLine($"{j + 1}. {listaColores[j]}");
+                    }
+
+                    int opcionColor = int.Parse(Console.ReadLine());
+
+                    if (opcionColor < 1 || opcionColor > listaColores.Length)
+                    {
+                        Console.WriteLine("Opción no válida. Seleccione un color entre 1 y 13.");
+                    }
+                    else
+                    {
+                        bandas[i] = listaColores[opcionColor - 1];
+                        colorValido = true;
+                    }
+                }
+            }
+
+            Console.WriteLine("\nColores seleccionados:");
+            for (int i = 0; i < bandas.Length; i++)
+            {
+                Console.WriteLine($"Banda {i + 1}: {bandas[i]}");
+            }
+
+            Resistor resistor = new Resistor(bandas);
+            Console.WriteLine($"Resistencia: {resistor.CalcularResistencia()} Ω");
+
+            double? tolerancia = resistor.ObtenerTolerancia();
+
+            if (tolerancia != null)
+            {
+                Console.WriteLine($"Tolerancia: {tolerancia}%");
+            }
+
+            Console.WriteLine("\n¿Quieres calcular otra resistencia? (si / no ): ");
+            string r = Console.ReadLine().ToLower();
+            Console.Clear();
+
+            if (r != "si")
+            {
+                Console.WriteLine("Gracias por usar el programa.");
+                break;
+            }
+        }
+    }
+}
